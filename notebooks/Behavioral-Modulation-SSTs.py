@@ -1,18 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     formats: ipynb,py:percent
-#     text_representation:
-#       extension: .py
-#       format_name: percent
-#       format_version: '1.3'
-#       jupytext_version: 1.16.0
-#   kernelspec:
-#     display_name: Python 3 (ipykernel)
-#     language: python
-#     name: python3
-# ---
-
 # %% [markdown]
 # # Behavioral modulation of visually Evoked Activity
 
@@ -31,6 +16,7 @@ import physion.utils.plot_tools as pt
 
 iFig = 0
 Fig_Folder = os.path.join('/Volumes', 'T7 Touch', 'FIGURES_SSTs')
+Fig_Folder = './figures'
 
 # %%
 DATASET = {\

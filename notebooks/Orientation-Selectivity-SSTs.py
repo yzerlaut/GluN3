@@ -1,18 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     formats: ipynb,py:percent
-#     text_representation:
-#       extension: .py
-#       format_name: percent
-#       format_version: '1.3'
-#       jupytext_version: 1.16.0
-#   kernelspec:
-#     display_name: Python 3 (ipykernel)
-#     language: python
-#     name: python3
-# ---
-
 # %%
 # general python modules
 import sys, os, pprint, pandas
@@ -30,6 +15,8 @@ from analysis import compute_tuning_response_per_cells, shift_orientation_accord
 
 iFig = 0
 Fig_Folder = os.path.join('/Volumes/', 'T7 Touch', 'FIGURES_SSTs')
+Fig_Folder = '../figures'
+dFolder = os.path.join(os.path.expanduser('~'), 'DATA', 'Taddy', 'Analysis')
 
 # %% [markdown]
 # ## Build the dataset from the NWB files
@@ -129,7 +116,7 @@ def compute_summary_responses(DATASET,
 if False:
     SUMMARY = compute_summary_responses(DATASET,
                                         verbose=False)
-    np.save('data/summary-episodes.npy', SUMMARY)
+    np.save(dFolder+'/data/summary-episodes.npy', SUMMARY)
 
 # %% [markdown]
 # # Responsiveness to visual stimulation
@@ -137,7 +124,7 @@ if False:
 # %%
 from scipy import stats
 
-SUMMARY = np.load('data/summary-episodes.npy', allow_pickle=True).item()
+SUMMARY = np.load(dFolder+'/data/summary-episodes.npy', allow_pickle=True).item()
 
 fig1, AX1 = pt.figure(axes=(2,3),figsize=(1.,1.2))
 
@@ -147,8 +134,9 @@ for i, case in enumerate(cases):
     for c, contrast in enumerate([0.5, 1.0]):
         resp = np.sum([np.sum(r) for r in SUMMARY[case]['SIGNIFICANT_c=%.1f' % contrast]])
         tot = np.sum([len(r) for r in SUMMARY[case]['SIGNIFICANT_c=%.1f' % contrast]])
-        pt.pie([100*resp/tot, 100*(1-resp/tot)], ax=AX1[i][c], COLORS=[colors[i], 'lightgrey'])
-        pt.annotate(AX1[i][c], '%.1f%%' % (100*resp/tot), (.5,.85), va='top', ha='center',color='w', fontsize=7)
+        pt.pie([100*resp/tot, 100*(1-resp/tot)], ax=AX1[i][c], 
+               COLORS=[colors[i], 'lightgrey'])
+        pt.annotate(AX1[i][c], '%.1f%%' % (100*resp/tot), (.5,.85), va='top', ha='center', color='w', fontsize=7)
         AX1[i][c].set_title('n=%i/%i\nN=%i sess.' % (resp,tot,len(SUMMARY[case]['SIGNIFICANT_c=%.1f' % contrast])), fontsize=7)
 
 fig2, AX2 = pt.figure(axes=(2,1), figsize=(.6,1.), wspace=5.)
@@ -172,7 +160,7 @@ def compute_summary_responses(DATASET,
                               Nmax=999, # max datafiles (for debugging)
                               verbose=True):
     
-    SUMMARY = np.load('data/summary-episodes.npy', allow_pickle=True).item()
+    SUMMARY = np.load(dFolder+'/data/summary-episodes.npy', allow_pickle=True).item()
 
     SUMMARY['dFoF_args'] = dFoF_parameters
     
@@ -224,7 +212,7 @@ def compute_summary_responses(DATASET,
 if False:
     SUMMARY = compute_summary_responses(DATASET,
                                         verbose=False)
-    np.save('data/summary-deconvolved.npy', SUMMARY)
+    np.save(dFolder+'/data/summary-deconvolved.npy', SUMMARY)
 
 # %%
 from scipy.optimize import minimize
@@ -245,7 +233,7 @@ def fit_gaussian_width(shift, array,
 
 
 # %%
-SUMMARY = np.load('data/summary-deconvolved.npy', allow_pickle=True).item()
+SUMMARY = np.load(dFolder+'/data/summary-deconvolved.npy', allow_pickle=True).item()
 
 fig, AX = pt.figure(axes=(2,1),figsize=(1.1,1.),wspace=0.1, right=7.)
 
@@ -405,7 +393,7 @@ def generate_comparison_figs(SUMMARY, cases, contrasts,
 
     return fig, ax2
 
-SUMMARY = np.load('data/summary-episodes.npy', allow_pickle=True).item()
+SUMMARY = np.load(dFolder+'/data/summary-episodes.npy', allow_pickle=True).item()
 
 CASES = ['GluN1KO', 'WT', 'GluN3KO']
 COLORS = ['tab:purple', 'darkorange', 'tab:green']
